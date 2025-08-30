@@ -6,20 +6,35 @@ using System.Threading.Tasks;
 
 namespace interview
 {
-    internal class Transaction
+    public class Transaction
     {
-        public int Type { get; }
+        public Transaction(string v)
+        {
+            Type = v;
+        }
 
-        public void DoSomething1() { }
+        public string Type { get; }
 
-        public void DoSomething2() { }
+        public double Amnt { get; set; }
 
-        public void DoSomething3() { }
+        public double AuthrsationAmnt { get; set; }
 
-        public void DoSomething4() { }
+        public double ReversalAmnt { get; set; }
 
-        public void DoSomething5() { }
+        public double? CalculateAmnt() 
+        {
+            switch (Type)
+            {
+                case "Sale":
+                    return Amnt + Amnt * 0.01;
+                case "Authorization":
+                    return AuthrsationAmnt + AuthrsationAmnt * 0.01;
+                case "Reversal":
+                    return AuthrsationAmnt + Amnt+ ReversalAmnt;
+                default:
+                    return null;
+            }
+        }
     }
-
 
 }
