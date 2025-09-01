@@ -1,40 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace interview
 {
+    public enum TransactionType
+    {
+        Sale,
+        Authorization,
+        Reversal
+    }
+
     public class Transaction
     {
-        public Transaction(string v)
+        private const double FeeRate = 0.01; // 1% fee for Sale and Authorization transactions
+
+        public Transaction(TransactionType transactionType)
         {
-            Type = v;
+            Type = transactionType;
         }
 
-        public string Type { get; }
+        public TransactionType Type { get; }
 
-        public double Amnt { get; set; }
+        public double Amount { get; set; }
 
-        public double AuthrsationAmnt { get; set; }
+        public double AuthorizationAmount { get; set; }
 
-        public double ReversalAmnt { get; set; }
+        public double ReversalAmount { get; set; }
 
-        public double? CalculateAmnt() 
+        public double? CalculateAmount() 
         {
             switch (Type)
             {
-                case "Sale":
-                    return Amnt + Amnt * 0.01;
-                case "Authorization":
-                    return AuthrsationAmnt + AuthrsationAmnt * 0.01;
-                case "Reversal":
-                    return AuthrsationAmnt + Amnt+ ReversalAmnt;
+                case TransactionType.Sale:
+                    return Amount + Amount * FeeRate;
+                case TransactionType.Authorization:
+                    return AuthorizationAmount + AuthorizationAmount * FeeRate;
+                case TransactionType.Reversal:
+                    // Reversal typically should negate amounts, but keeping original logic for compatibility
+                    return AuthorizationAmount + Amount + ReversalAmount;
                 default:
-                    return null;
+                    throw new ArgumentException($"Unknown transaction type: {Type}");
             }
         }
     }
-
 }
